@@ -67,7 +67,10 @@ namespace CS2SaveFixer.Mod
 
         public override void SetDefaults()
         {
-            throw new System.NotImplementedException();
+            Toggle = false;
+            IntSlider = 0;
+            IntDropdown = 0;
+            EnumDropdown = SomeEnum.Value1;
         }
 
         public enum SomeEnum
