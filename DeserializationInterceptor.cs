@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Colossal.Logging;
 
 namespace CS2SaveFixer.Mod
 {
     public class DeserializationInterceptor
     {
+        private static readonly ILog log = LogManager.GetLogger($"{nameof(CS2SaveFixer.Mod)}.{nameof(DeserializationInterceptor)}");
         private static bool _patchesInstalled = false;
         private static readonly Dictionary<string, string> PrefabFallbackTable = new();
 
@@ -12,15 +14,15 @@ namespace CS2SaveFixer.Mod
         {
             if (_patchesInstalled) return;
 
-            Console.WriteLine("[CS2SaveFixer] Installing Harmony/Deserialization exception handling hooks...");
+            log.Info("Installing Harmony/Deserialization exception handling hooks...");
             _patchesInstalled = true;
         }
 
         public static string ResolveMissingPrefabGuid(string originalGuid, string prefabType)
         {
-            Console.WriteLine($"[CS2SaveFixer] Intercepted missing prefab GUID '{originalGuid}' (Type: {prefabType}).");
+            log.Info($"Intercepted missing prefab GUID '{originalGuid}' (Type: {prefabType}).");
 
-            if (PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
+            if (originalGuid != null && PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
             {
                 return fallback;
             }
@@ -34,7 +36,7 @@ namespace CS2SaveFixer.Mod
                 _ => "BaseGame.GenericObject"
             };
 
-            Console.WriteLine($"[CS2SaveFixer] Remapped missing prefab '{originalGuid}' -> '{safeDefault}'.");
+            log.Info($"Remapped missing prefab '{originalGuid}' -> '{safeDefault}'.");
             return safeDefault;
         }
 
@@ -47,8 +49,8 @@ namespace CS2SaveFixer.Mod
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[CS2SaveFixer] Caught deserialization exception on component '{componentTypeName}': {ex.Message}");
-                Console.WriteLine("[CS2SaveFixer] Skipping corrupted component chunk to preserve world loading state.");
+                log.Warn($"Caught deserialization exception on component '{componentTypeName}': {ex.Message}");
+                log.Warn("Skipping corrupted component chunk to preserve world loading state.");
                 return false;
             }
         }

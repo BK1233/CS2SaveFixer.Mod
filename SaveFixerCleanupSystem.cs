@@ -16,17 +16,23 @@ namespace CS2SaveFixer.Mod
 
     public class SaveFixerCleanupSystem
     {
+        private static readonly Colossal.Logging.ILog log = Colossal.Logging.LogManager.GetLogger($"{nameof(CS2SaveFixer.Mod)}.{nameof(SaveFixerCleanupSystem)}");
+
         public static void Initialize()
         {
             Console.WriteLine("[CS2SaveFixer] SaveFixerCleanupSystem registered for ECS world updates.");
+            log.Info("SaveFixerCleanupSystem registered for ECS world updates.");
         }
 
         public static int RunSanitizePass(List<SimulatedEntity> entities)
         {
             int fixedCount = 0;
+            int writeIndex = 0;
 
-            foreach (var entity in entities.ToList())
+            for (int readIndex = 0; readIndex < entities.Count; readIndex++)
             {
+                var entity = entities[readIndex];
+
                 // 1. Sanitize float coordinates (NaN / Inf)
                 if (float.IsNaN(entity.PositionX) || float.IsInfinity(entity.PositionX) ||
                     float.IsNaN(entity.PositionY) || float.IsInfinity(entity.PositionY) ||
@@ -36,19 +42,31 @@ namespace CS2SaveFixer.Mod
                     entity.PositionY = 0f;
                     entity.PositionZ = 0f;
                     fixedCount++;
-                    Console.WriteLine($"[CS2SaveFixer] Sanitized invalid position vector on Entity ID {entity.Id}.");
+                    log.Info($"Sanitized invalid position vector on Entity ID {entity.Id}.");
                 }
 
                 // 2. Remove invalid/orphaned simulation entities
                 if (entity.IsOrphaned || !entity.HasValidPrefab)
                 {
-                    entities.Remove(entity);
                     fixedCount++;
-                    Console.WriteLine($"[CS2SaveFixer] Purged orphaned entity ID {entity.Id}.");
+                    log.Info($"Purged orphaned entity ID {entity.Id}.");
+                }
+                else
+                {
+                    if (writeIndex != readIndex)
+                    {
+                        entities[writeIndex] = entity;
+                    }
+                    writeIndex++;
                 }
             }
 
-            Console.WriteLine($"[CS2SaveFixer] Sanitize pass complete. Fixed/cleaned {fixedCount} entity issues.");
+            if (writeIndex < entities.Count)
+            {
+                entities.RemoveRange(writeIndex, entities.Count - writeIndex);
+            }
+
+            log.Info($"Sanitize pass complete. Fixed/cleaned {fixedCount} entity issues.");
             return fixedCount;
         }
     }

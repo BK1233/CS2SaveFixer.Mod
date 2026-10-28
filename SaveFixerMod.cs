@@ -10,16 +10,18 @@ namespace CS2SaveFixer.Mod
         public bool IsFallbackPrefabResolverEnabled { get; set; } = true;
         public bool IsAutomaticCleanupSystemEnabled { get; set; } = true;
 
+        private static readonly Colossal.Logging.ILog log = Colossal.Logging.LogManager.GetLogger($"{nameof(CS2SaveFixer.Mod)}.{nameof(SaveFixerMod)}");
+
         public void OnLoad(UpdateSystem updateSystem)
         {
             Instance = this;
-            Console.WriteLine("[CS2SaveFixer] CS2 Save Fixer Runtime Mod loaded successfully.");
+            log.Info("[CS2SaveFixer] CS2 Save Fixer Runtime Mod loaded successfully.");
             InitializeSystems();
         }
 
         public void OnDispose()
         {
-            Console.WriteLine("[CS2SaveFixer] CS2 Save Fixer Runtime Mod unloaded.");
+            log.Info("[CS2SaveFixer] CS2 Save Fixer Runtime Mod unloaded.");
         }
 
         private void InitializeSystems()
