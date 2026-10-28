@@ -12,7 +12,6 @@ namespace CS2SaveFixer.Mod
         public float PositionZ { get; set; }
         public bool HasValidPrefab { get; set; } = true;
         public bool IsOrphaned { get; set; } = false;
-        Mod.log.Info("SaveFixerCleanupSystem registered for ECS world updates.");
     }
 
     public class SaveFixerCleanupSystem
@@ -60,49 +59,15 @@ namespace CS2SaveFixer.Mod
                     }
                     writeIndex++;
                 }
-        int fixedCount = 0;
-        int writeIndex = 0;
-
-        for (int readIndex = 0; readIndex < entities.Count; readIndex++)
-        {
-            var entity = entities[readIndex];
-
-            // 1. Sanitize float coordinates (NaN / Inf)
-            if (float.IsNaN(entity.PositionX) || float.IsInfinity(entity.PositionX) ||
-                float.IsNaN(entity.PositionY) || float.IsInfinity(entity.PositionY) ||
-                float.IsNaN(entity.PositionZ) || float.IsInfinity(entity.PositionZ))
-            {
-                entity.PositionX = 0f;
-                entity.PositionY = 0f;
-                entity.PositionZ = 0f;
-                fixedCount++;
-                Mod.log.Info($"Sanitized invalid position vector on Entity ID {entity.Id}.");
             }
 
             if (writeIndex < entities.Count)
             {
                 entities.RemoveRange(writeIndex, entities.Count - writeIndex);
-                fixedCount++;
-                Mod.log.Info($"Purged orphaned entity ID {entity.Id}.");
-            }
-            else
-            {
-                if (writeIndex != readIndex)
-                {
-                    entities[writeIndex] = entity;
-                }
-                writeIndex++;
             }
 
             log.Info($"Sanitize pass complete. Fixed/cleaned {fixedCount} entity issues.");
             return fixedCount;
         }
-        if (writeIndex < entities.Count)
-        {
-            entities.RemoveRange(writeIndex, entities.Count - writeIndex);
-        }
-
-        Mod.log.Info($"Sanitize pass complete. Fixed/cleaned {fixedCount} entity issues.");
-        return fixedCount;
     }
 }

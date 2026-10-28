@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CS2SaveFixer.Mod": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\Cities2.exe"
+    }
+  }
+}

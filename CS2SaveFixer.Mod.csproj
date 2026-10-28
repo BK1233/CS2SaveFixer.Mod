@@ -2,9 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework Condition="'$(TargetFramework)' == ''">net8.0</TargetFramework>
-		<TargetFramework>net8.0</TargetFramework>
 		<Configurations>Debug;Release</Configurations>
-		<TargetFramework Condition="'$(TargetFramework)' == ''">net8.0</TargetFramework>
 		<LangVersion>10.0</LangVersion>
 		<DefaultItemExcludes>$(DefaultItemExcludes);CS2SaveFixer.Mod.Tests\**</DefaultItemExcludes>
 	
@@ -14,10 +12,6 @@
 	
 	<!--Imports must be after PropertyGroup block-->
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != '' And Exists('$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))\Mod.props')" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != ''" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != ''" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" Condition="Exists('$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))\Mod.props')" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" Condition="Exists('$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))\Mod.targets')" />
 
 	<!-- When CSII_TOOLPATH is not set, include stub implementations located in test directory for headless unit testing -->
 	<ItemGroup Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' == ''">
