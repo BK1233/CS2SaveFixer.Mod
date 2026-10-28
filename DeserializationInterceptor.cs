@@ -20,7 +20,7 @@ namespace CS2SaveFixer.Mod
     {
         Console.WriteLine($"[CS2SaveFixer] Intercepted missing prefab GUID '{originalGuid}' (Type: {prefabType}).");
 
-        if (PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
+        if (originalGuid != null && PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
         {
             return fallback;
         }
