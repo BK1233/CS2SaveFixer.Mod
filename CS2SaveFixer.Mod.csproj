@@ -4,7 +4,7 @@
 		<TargetFramework Condition="'$(TargetFramework)' == ''">net8.0</TargetFramework>
 		<Configurations>Debug;Release</Configurations>
 		<LangVersion>10.0</LangVersion>
-		<DefaultItemExcludes>$(DefaultItemExcludes);CS2SaveFixer.Mod.Tests\**</DefaultItemExcludes>
+		<DefaultItemExcludes>$(DefaultItemExcludes);CS2SaveFixer.Mod.Tests\**;CS2SaveFixer.Tests\**</DefaultItemExcludes>
 	
 		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
 		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
@@ -74,6 +74,7 @@
 
 	<ItemGroup>
 		<Compile Remove="CS2SaveFixer.Mod.Tests\**" />
+		<Compile Remove="CS2SaveFixer.Tests\**" />
 	</ItemGroup>
 
 	<ItemGroup>
