@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<TargetFramework Condition="'$(TargetFramework)' == ''">net8.0</TargetFramework>
 		<TargetFramework>net8.0</TargetFramework>
 		<Configurations>Debug;Release</Configurations>
 		<TargetFramework Condition="'$(TargetFramework)' == ''">net8.0</TargetFramework>
@@ -12,6 +13,7 @@
 	</PropertyGroup>
 	
 	<!--Imports must be after PropertyGroup block-->
+	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != '' And Exists('$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))\Mod.props')" />
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != ''" />
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != ''" />
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" Condition="Exists('$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))\Mod.props')" />
@@ -84,5 +86,7 @@
 		<None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
 		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
 	</ItemGroup>
+
+	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != '' And Exists('$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))\Mod.targets')" />
 
 </Project>
