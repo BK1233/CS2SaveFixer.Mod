@@ -1,56 +1,58 @@
 using System;
 using System.Collections.Generic;
+using Colossal.Logging;
 
 namespace CS2SaveFixer.Mod
 {
     public class DeserializationInterceptor
-{
-    private static bool _patchesInstalled = false;
-    private static readonly Dictionary<string, string> PrefabFallbackTable = new();
-
-    public static void InstallPatches()
     {
-        if (_patchesInstalled) return;
+        private static readonly ILog log = LogManager.GetLogger($"{nameof(CS2SaveFixer.Mod)}.{nameof(DeserializationInterceptor)}");
+        private static bool _patchesInstalled = false;
+        private static readonly Dictionary<string, string> PrefabFallbackTable = new();
 
-        Console.WriteLine("[CS2SaveFixer] Installing Harmony/Deserialization exception handling hooks...");
-        _patchesInstalled = true;
-    }
-
-    public static string ResolveMissingPrefabGuid(string originalGuid, string prefabType)
-    {
-        Console.WriteLine($"[CS2SaveFixer] Intercepted missing prefab GUID '{originalGuid}' (Type: {prefabType}).");
-
-        if (PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
+        public static void InstallPatches()
         {
-            return fallback;
+            if (_patchesInstalled) return;
+
+            log.Info("Installing Harmony/Deserialization exception handling hooks...");
+            _patchesInstalled = true;
         }
 
-        // Return a safe base game fallback identifier depending on category
-        string safeDefault = prefabType switch
+        public static string ResolveMissingPrefabGuid(string originalGuid, string prefabType)
         {
-            "BuildingPrefab" => "BaseGame.DefaultBuilding",
-            "NetPrefab" => "BaseGame.TwoLaneRoad",
-            "VehiclePrefab" => "BaseGame.SedanVehicle",
-            _ => "BaseGame.GenericObject"
-        };
+            log.Info($"Intercepted missing prefab GUID '{originalGuid}' (Type: {prefabType}).");
 
-        Console.WriteLine($"[CS2SaveFixer] Remapped missing prefab '{originalGuid}' -> '{safeDefault}'.");
-        return safeDefault;
-    }
+            if (PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
+            {
+                return fallback;
+            }
 
-    public static bool TryDeserializeComponentSafe(Action deserializeAction, string componentTypeName)
-    {
-        try
-        {
-            deserializeAction();
-            return true;
+            // Return a safe base game fallback identifier depending on category
+            string safeDefault = prefabType switch
+            {
+                "BuildingPrefab" => "BaseGame.DefaultBuilding",
+                "NetPrefab" => "BaseGame.TwoLaneRoad",
+                "VehiclePrefab" => "BaseGame.SedanVehicle",
+                _ => "BaseGame.GenericObject"
+            };
+
+            log.Info($"Remapped missing prefab '{originalGuid}' -> '{safeDefault}'.");
+            return safeDefault;
         }
-        catch (Exception ex)
+
+        public static bool TryDeserializeComponentSafe(Action deserializeAction, string componentTypeName)
         {
-            Console.WriteLine($"[CS2SaveFixer] Caught deserialization exception on component '{componentTypeName}': {ex.Message}");
-            Console.WriteLine("[CS2SaveFixer] Skipping corrupted component chunk to preserve world loading state.");
-            return false;
+            try
+            {
+                deserializeAction();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.Warn($"Caught deserialization exception on component '{componentTypeName}': {ex.Message}");
+                log.Warn("Skipping corrupted component chunk to preserve world loading state.");
+                return false;
+            }
         }
     }
-}
 }

@@ -2,15 +2,22 @@
 
 	<PropertyGroup>
 		<Configurations>Debug;Release</Configurations>
+		<TargetFramework Condition="'$(TargetFramework)' == ''">net8.0</TargetFramework>
 		<LangVersion>10.0</LangVersion>
+		<DefaultItemExcludes>$(DefaultItemExcludes);CS2SaveFixer.Mod.Tests\**</DefaultItemExcludes>
 	
 		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
 		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
 	</PropertyGroup>
 	
 	<!--Imports must be after PropertyGroup block-->
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
+	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" Condition="Exists('$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))\Mod.props')" />
+	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" Condition="Exists('$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))\Mod.targets')" />
+
+	<!-- When CSII_TOOLPATH is not set, include stub implementations located in test directory for headless unit testing -->
+	<ItemGroup Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' == ''">
+		<Compile Include="CS2SaveFixer.Mod.Tests\GameStubs.cs" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="Game">
