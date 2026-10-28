@@ -16,12 +16,14 @@ namespace CS2SaveFixer.Mod
         {
             Instance = this;
             log.Info("[CS2SaveFixer] CS2 Save Fixer Runtime Mod loaded successfully.");
+            Mod.log.Info("[CS2SaveFixer] CS2 Save Fixer Runtime Mod loaded successfully.");
             InitializeSystems();
         }
 
         public void OnDispose()
         {
             log.Info("[CS2SaveFixer] CS2 Save Fixer Runtime Mod unloaded.");
+            Mod.log.Info("[CS2SaveFixer] CS2 Save Fixer Runtime Mod unloaded.");
         }
 
         private void InitializeSystems()

@@ -11,6 +11,11 @@ namespace CS2SaveFixer.Mod
         private static readonly Dictionary<string, string> PrefabFallbackTable = new();
 
         public static void InstallPatches()
+    public static string ResolveMissingPrefabGuid(string originalGuid, string prefabType)
+    {
+        Console.WriteLine($"[CS2SaveFixer] Intercepted missing prefab GUID '{originalGuid}' (Type: {prefabType}).");
+
+        if (originalGuid != null && PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
         {
             if (_patchesInstalled) return;
 
@@ -23,6 +28,7 @@ namespace CS2SaveFixer.Mod
             log.Info($"Intercepted missing prefab GUID '{originalGuid}' (Type: {prefabType}).");
 
             if (originalGuid != null && PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
+            if (PrefabFallbackTable.TryGetValue(originalGuid, out var fallback))
             {
                 return fallback;
             }
