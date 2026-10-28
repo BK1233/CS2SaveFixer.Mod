@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
 		<Configurations>Debug;Release</Configurations>
 		<LangVersion>10.0</LangVersion>
 	
@@ -9,8 +10,8 @@
 	</PropertyGroup>
 	
 	<!--Imports must be after PropertyGroup block-->
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
+	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != ''" />
+	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" Condition="'$([System.Environment]::GetEnvironmentVariable(&quot;CSII_TOOLPATH&quot;, &quot;EnvironmentVariableTarget.User&quot;))' != ''" />
 
 	<ItemGroup>
 		<Reference Include="Game">
@@ -64,6 +65,10 @@
 		<Reference Update="System.Data">
 			<Private>false</Private>
 		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="CS2SaveFixer.Mod.Tests\**" />
 	</ItemGroup>
 
 	<ItemGroup>
