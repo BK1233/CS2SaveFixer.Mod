@@ -1,6 +1,10 @@
-namespace CS2SaveFixer.Mod;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-public class SimulatedEntity
+namespace CS2SaveFixer.Mod
+{
+    public class SimulatedEntity
 {
     public int Id { get; set; }
     public float PositionX { get; set; }
@@ -47,4 +51,5 @@ public class SaveFixerCleanupSystem
         Console.WriteLine($"[CS2SaveFixer] Sanitize pass complete. Fixed/cleaned {fixedCount} entity issues.");
         return fixedCount;
     }
+}
 }

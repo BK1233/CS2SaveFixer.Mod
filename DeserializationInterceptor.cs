@@ -1,6 +1,9 @@
-namespace CS2SaveFixer.Mod;
+using System;
+using System.Collections.Generic;
 
-public class DeserializationInterceptor
+namespace CS2SaveFixer.Mod
+{
+    public class DeserializationInterceptor
 {
     private static bool _patchesInstalled = false;
     private static readonly Dictionary<string, string> PrefabFallbackTable = new();
@@ -49,4 +52,5 @@ public class DeserializationInterceptor
             return false;
         }
     }
+}
 }

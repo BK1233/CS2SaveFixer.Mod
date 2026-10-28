@@ -24,6 +24,9 @@ namespace CS2SaveFixer.Mod
 
 
             AssetDatabase.global.LoadSettings(nameof(CS2SaveFixer.Mod), m_Setting, new Setting(this));
+
+            DeserializationInterceptor.InstallPatches();
+            SaveFixerCleanupSystem.Initialize();
         }
 
         public void OnDispose()
